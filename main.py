@@ -29,6 +29,14 @@ params = {
 
 response = requests.post(exercise_end_point, headers=headers, json=params)
 result = response.json()
+bearer_headers = {
+    "Authorization": "Bearer tedswahn90&tyi"
+}
+# sheet_response = requests.post(
+#     sheet_endpoint,
+#     json=sheet_inputs,
+#     headers=bearer_headers
+# )
 
 for exercise in result["exercises"]:
     sheet_inputs = {
@@ -40,7 +48,7 @@ for exercise in result["exercises"]:
             "calories": exercise["nf_calories"]
             }
         }
-    sheet_response = requests.post(google_sheet_post_endpoint, json=sheet_inputs)
+    sheet_response = requests.post(google_sheet_post_endpoint, json=sheet_inputs, headers=bearer_headers)
     print(sheet_inputs)
 
 
