@@ -1,5 +1,9 @@
 import requests
+from datetime import datetime
+today = datetime.today().strftime("%Y/%m/%d")
+now_time = datetime.now().strftime("%X")
 
+time = 14
 exercise_end_point = "https://trackapi.nutritionix.com/v2/natural/exercise"
 google_sheet_post_endpoint = "https://api.sheety.co/a65a5261a2264fc12b066bf2426cd8bc/myWorkouts/workouts"
 GENDER = "male"
@@ -25,8 +29,19 @@ params = {
 
 response = requests.post(exercise_end_point, headers=headers, json=params)
 result = response.json()
-print(result)
 
-google_post = requests.post(google_sheet_post_endpoint, json = result)
+for exercise in result["exercises"]:
+    sheet_inputs = {
+        "workout": {
+            "date": today,
+            "time": now_time,
+            "exercise": exercise["name"].title(),
+            "duration": exercise["duration_min"],
+            "calories": exercise["nf_calories"]
+            }
+        }
+    sheet_response = requests.post(google_sheet_post_endpoint, json=sheet_inputs)
+    print(sheet_inputs)
+
 
 
